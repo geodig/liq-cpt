@@ -1,7 +1,6 @@
-math
 matplotlib
 scipy
 folium
-streamlit-folium
+streamlit_folium
 openpyxl
 utm
