@@ -75,7 +75,7 @@ with st.sidebar.expander("**INPUT FILES**"):
         with tab3:
             col1, col2 = st.columns(2)
             with col1:
-                mapfol = st_folium(m, height=600, width=700)
+                mapfol = st_folium(m, height=600, width=700, returned_objects=[])
             with col2:
                 st.table(sh_df)
         
