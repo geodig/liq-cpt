@@ -7,7 +7,7 @@ Created on Fri Mar  3 14:04:54 2023
 import streamlit as st
 # from streamlit_extras.app_logo import add_logo
 import folium
-from streamlit_folium import st_folium
+from streamlit_folium import st_folium, folium_static
 import openpyxl
 import pandas
 import utm
@@ -75,7 +75,7 @@ with st.sidebar.expander("**INPUT FILES**"):
         with tab3:
             col1, col2 = st.columns(2)
             with col1:
-                mapfol = st_folium(m, height=600, width=700, returned_objects=[])
+                folium_static(m, height=600, width=700)
             with col2:
                 st.table(sh_df)
         
@@ -108,19 +108,25 @@ with st.sidebar.expander("**INPUT FILES**"):
             st.session_state["result_fig"] = fig
             st.session_state["result_df"] = df
         
-        fig = st.session_state["result_fig"]
-        df = st.session_state["result_df"]
+        if "result_fig" in st.session_state:
+            fig = st.session_state["result_fig"]
+            with tab1:
+                st.pyplot(fig)
+        elif "result_fig" not in st.session_state:
+            tab1.warning("Set the parameter and click the submit button.",icon="⚠️")
 
-        with tab1:
-            st.pyplot(fig)
-        with tab2:
-            st.write(df)
-            csv = convert_df(df)
-            st.download_button(
-                label="Download CSV",
-                data=csv,
-                file_name='result_%s.csv'%(select),
-                mime='text/csv')
+        if "result_df" in st.session_state:
+            df = st.session_state["result_df"]
+            with tab2:
+                st.write(df)
+                csv = convert_df(df)
+                st.download_button(
+                    label="Download CSV",
+                    data=csv,
+                    file_name='result_%s.csv'%(select),
+                    mime='text/csv')
+        elif "result_df" not in st.session_state:
+            tab2.warning("Set the parameter and click the submit button.",icon="⚠️")
 
     else:
         tab1.warning("Please upload files from the sidebar.",icon="⚠️")
