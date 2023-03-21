@@ -4,4 +4,3 @@ folium
 streamlit_folium
 openpyxl
 utm
-fpdf
