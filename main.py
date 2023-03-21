@@ -12,6 +12,7 @@ import openpyxl
 import pandas
 import utm
 from module.cptliqsett import CPT_LIQ
+from fpdf import FPDF
 
 st.set_page_config(page_title="WBLIQ-CPT"
                     ,layout="wide"
@@ -117,6 +118,13 @@ with st.sidebar.expander("**INPUT FILES**"):
 
         if "result_df" in st.session_state:
             df = st.session_state["result_df"]
+            
+            pdf = FPDF()
+            pdf.add_page()
+            pdf.set_font('Arial', 'B', 16)
+            pdf.cell(40, 10, 'Hello World!')
+            pdf.output('tuto1.pdf', 'F')
+            
             with tab2:
                 st.write(df)
                 csv = convert_df(df)
@@ -125,6 +133,15 @@ with st.sidebar.expander("**INPUT FILES**"):
                     data=csv,
                     file_name='result_%s.csv'%(select),
                     mime='text/csv')
+                
+                with open("tuto1.pdf", "rb") as pdf_file:
+                    PDFbyte = pdf_file.read()
+                
+                st.download_button(label="Download PDF",
+                                    data=PDFbyte,
+                                    file_name="test.pdf",
+                                    mime='application/octet-stream')
+                
         elif "result_df" not in st.session_state:
             tab2.warning("Set the parameter and click the submit button.",icon="⚠️")
 
